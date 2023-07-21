@@ -25,9 +25,10 @@ class Typewriter {
     initialOptions: null,
     elements: {
       container: null,
-      wrapper: document.createElement('span'),
-      cursor: document.createElement('span'),
+      wrapper: null,
+      cursor: null,
     },
+    svg: null,
   }
 
   options = {
@@ -61,6 +62,12 @@ class Typewriter {
         this.state.elements.container = container;
       }
     }
+    
+    // Determine if the container is an SVG text element
+    options.svg = options.svg || this.state.elements.container.tagName === 'text';
+
+    // Get strings from options or data attribute
+    options.strings = options.strings || JSON.parse(this.state.elements.container.getAttribute('data-typewriter'));
 
     if(options) {
       this.options = {
@@ -101,11 +108,22 @@ class Typewriter {
       return
     }
 
-    this.state.elements.wrapper.className = this.options.wrapperClassName;
-    this.state.elements.cursor.className = this.options.cursorClassName;
+    if(this.options.svg) {
+      this.state.elements.wrapper = document.createElementNS('http://www.w3.org/2000/svg','tspan');
+      this.state.elements.cursor = document.createElementNS('http://www.w3.org/2000/svg','tspan');
 
-    this.state.elements.cursor.innerHTML = this.options.cursor;
-    this.state.elements.container.innerHTML = '';
+      this.state.elements.cursor.textContent = this.options.cursor;
+      this.state.elements.container.textContent = '';
+    } else {
+      this.state.elements.wrapper = document.createElement('span');
+      this.state.elements.cursor = document.createElement('span');
+
+      this.state.elements.cursor.innerHTML = this.options.cursor;
+      this.state.elements.container.innerHTML = '';
+    }
+
+    this.state.elements.wrapper.setAttribute('class', this.options.wrapperClassName);
+    this.state.elements.cursor.setAttribute('class', this.options.cursorClassName);
 
     this.state.elements.container.appendChild(this.state.elements.wrapper);
     this.state.elements.container.appendChild(this.state.elements.cursor);
@@ -243,11 +261,15 @@ class Typewriter {
     if(childNodes.length > 0 ) {
       for(let i = 0; i < childNodes.length; i++) {
         const node = childNodes[i];
-        const nodeHTML = node.innerHTML;
+        const nodeHTML = this.options.svg ? node.textContent : node.innerHTML;
 
         if(node && node.nodeType !== 3) {
           // Reset innerText of HTML element
-          node.innerHTML = '';
+          if(this.options.svg) {
+            node.textContent = '';
+          } else {
+            node.innerHTML = '';
+          }
 
           // Add event queue item to insert HTML tag before typing characters
           this.addEventToQueue(EVENT_NAMES.ADD_HTML_TAG_ELEMENT, {
@@ -712,7 +734,11 @@ class Typewriter {
 
       case EVENT_NAMES.CHANGE_CURSOR: {
         this.options.cursor = currentEvent.eventArgs.cursor;
-        this.state.elements.cursor.innerHTML = currentEvent.eventArgs.cursor;
+        if(this.options.svg) {
+          this.state.elements.cursor.textContent = currentEvent.eventArgs.cursor;
+        } else {
+          this.state.elements.cursor.innerHTML = currentEvent.eventArgs.cursor;
+        }
         break;
       }
 
