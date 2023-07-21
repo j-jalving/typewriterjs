@@ -8,6 +8,9 @@
 [JSFiddle Example](https://jsfiddle.net/hzfxp2L9/)
 [Emoji Example](https://codesandbox.io/s/typewriter-effect-emojis-pgz6e)
 
+## Forked
+This package is forked from [tameemsafi/typewriterjs](https://github.com/tameemsafi/typewriterjs) and adds SVG support.
+
 ## CDN
 
 You can use the CDN version of this plugin for fast and easy setup.
@@ -65,6 +68,7 @@ new Typewriter('#typewriter', {
 | stringSplitter | Function | String splitter function, can be used to [split emoji's](https://codesandbox.io/s/typewriter-effect-emojis-pgz6e) |
 | onCreateTextNode | Function | null | Callback function to replace the internal method which creates a text node for the character before adding it to the DOM. If you return null, then it will not add anything to the DOM and so it is up to you to handle it. |
 | onRemoveNode | Function | null | Callback function when a node is about to be removed. First param will be an object `{ node: HTMLNode, charater: string }` |
+| svg | Boolean | null | Use if the container is an SVG <text> element. This option will be autodetected by default. ` |
 
 ## Methods
 
