@@ -1,5 +1,5 @@
 {
-  "name": "typewriter-effect",
+  "name": "typewriter-effect-svg",
   "version": "2.20.1",
   "main": "dist/react.js",
   "types": "index.d.ts",
@@ -17,8 +17,8 @@
     "LICENSE",
     "readme.md"
   ],
-  "repository": "git@github.com:tameemsafi/typewriterjs.git",
-  "author": "Tameem Safi <tameem@safi.me.uk>",
+  "repository": "git@github.com:j-jalving/typewriterjs.git",
+  "author": "Jouri Jalving <info@jourijalving.nl>",
   "license": "MIT",
   "scripts": {
     "build:prod": "webpack --config ./webpack/production.config.babel.js",
